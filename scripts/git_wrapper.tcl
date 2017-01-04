@@ -18,6 +18,17 @@ namespace eval ::git_wrapper {
     proc git {args} {
         set command [lindex $args 0]
 
+		# Change directory project directory if not in it yet
+		set proj_dir [regsub {\/work$} [get_property DIRECTORY [current_project]] {}]
+		set current_dir [pwd]
+		if {
+			[string compare -nocase $proj_dir $current_dir]
+		} then {
+			puts "Not in project directory"
+			puts "Changing directory to: ${proj_dir}"
+			cd $proj_dir
+		}
+
         switch $command {
             "init" {git_init {*}$args}
             "commit" {git_commit {*}$args}

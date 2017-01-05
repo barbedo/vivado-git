@@ -44,6 +44,7 @@ namespace eval ::git_wrapper {
 
         # Initialize the repo
         exec git {*}$args
+        exec git add .gitignore
     }
 
     proc git_commit {args} {

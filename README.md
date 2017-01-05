@@ -4,28 +4,49 @@ Trying to make Vivado more git-friendly on Windows.
 
 ### Requirements
 
-[Git for Windows.](https://git-scm.com/download/win)
+- [Git for Windows](https://git-scm.com/download/win)
+- Add `C:\Program Files\Git\bin` (or wherever you have your `git.exe`) to your `PATH`
 
 ### Installation
 
-Append/replace/add `init.tcl` and the `scripts` directory to `%APPDATA%\Roaming\Xilinx\Vivado`.
+Add `init.tcl` (or append the relevant lines if you already have something in it) along with the `scripts` directory to `%APPDATA%\Roaming\Xilinx\Vivado`.
 
 ### How it works
 
 Vivado is a pain in the ass to source control decently, so these scripts provide:
 
-  - A modified `write_project_tcl_git` script to generate a project generator script without absolute paths.
+  - A modified `write_project_tcl_git.tcl` script to generate the project script without absolute paths.
 
-  - A git wrapper that will regenerate the project script and add it before commiting.
+  - A git wrapper that will recreate the project script and add it before committing.
 
 ### Workflow
 
-When first starting with a project, create it at a folder like `C:/.../PROJECT_NAME/work`. All the untracked files will be under this directory.
+ 1. When first starting with a project, create it in a folder called `work` (eg. `C:/.../PROJECT_NAME/work`) . All the untracked files will be under this directory.
 
-Place your source files anywhere you want in your project folder.
+ 2. Place your source files anywhere you want in your project folder (usually in the `C:/.../PROJECT_NAME/src`).
+    
+    Here is an example of a possible project structure:
+    ```
+    PROJECT_NAME
+        ├── .git
+        ├── .gitignore
+        ├── project_name.tcl         # Project generator script
+        ├── src/                     # Tracked source files
+        │   ├── *.v
+        │   ├── *.vhd
+        │   └── ...
+        └── work/                    # Untracked generated files
+            ├── project_name.xpr 
+            ├── project_name.cache/
+            ├── project_name.hw/
+            ├── project_name.sim/
+            └── ...
+    ```
 
-Then go to your project directory using the Tcl Console with `cd C:/.../PROJECT_NAME` before adding or committing you files.
+ 3. Initiate the git repository with `git init` on the Tcl Console. This will create the repository, automatically change to your project directory (`C:/.../PROJECT_NAME`), generate the `.gitignore` file and stage it. 
 
-When you are done, just add your files and `git commit` your project. A `PROJECT_NAME.tcl` script will be created in your `PROJECT_NAME` folder and added to your commit.
+ 4. Stage your source files with `git add`.
 
-When reopening the project, make sure to do it by using `Tools -> Run Tcl Script...`. The Tcl Console will change the directory to your project folder automatically.
+ 5. When you are done, `git commit` your project. A `PROJECT_NAME.tcl` script will be created in your `C:/.../PROJECT_NAME` folder and added to your commit.
+
+ 6. When opening the project after a cloning, do it by using `Tools -> Run Tcl Script...` and selecting the `PROJECT_NAME.tcl` file created earlier. This will regenerate the project so that you can continue working.

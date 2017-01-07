@@ -649,32 +649,6 @@ proc write_header { proj_dir proj_name file } {
   puts $a_global_vars(fh) "#   original project, however they will not be launched automatically. To regenerate the"
   puts $a_global_vars(fh) "#   run results please launch the synthesis/implementation runs as needed.\n#"
   puts $a_global_vars(fh) "#*****************************************************************************************"
-  puts $a_global_vars(fh) "# NOTE: In order to use this script for source control purposes, please make sure that the"
-  puts $a_global_vars(fh) "#       following files are added to the source control system:-"
-  puts $a_global_vars(fh) "#"
-  puts $a_global_vars(fh) "# 1. This project restoration tcl script (${tcl_file}) that was generated."
-  puts $a_global_vars(fh) "#"
-  puts $a_global_vars(fh) "# 2. The following source(s) files that were local or imported into the original project."
-  puts $a_global_vars(fh) "#    (Please see the '\$orig_proj_dir' and '\$origin_dir' variable setting below at the start of the script)\n#"
-
-  if {[llength $l_local_files] == 0} {
-    puts $a_global_vars(fh) "#    <none>"
-  } else {
-    foreach line $l_local_files {
-      puts $a_global_vars(fh) "#    $line"
-    }
-  }
-  puts $a_global_vars(fh) "#"
-  puts $a_global_vars(fh) "# 3. The following remote source files that were added to the original project:-\n#"
-  if {[llength $l_remote_files] == 0} {
-    puts $a_global_vars(fh) "#    <none>"
-  } else {
-    foreach line $l_remote_files {
-      puts $a_global_vars(fh) "#    $line"
-    }
-  }
-  puts $a_global_vars(fh) "#"
-  puts $a_global_vars(fh) "#*****************************************************************************************\n"
 }
 
 proc print_local_file_msg { msg_type } {

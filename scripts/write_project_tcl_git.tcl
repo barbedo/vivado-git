@@ -852,6 +852,11 @@ proc write_props { proj_dir proj_name get_what tcl_obj type } {
     # skip read-only properties
     if { [lsearch $read_only_props $prop] != -1 } { continue }
 
+    # skip ip_output_repo (contains absolute path)
+    if {
+      [string equal $type "project"] && [string equal -nocase $prop "ip_output_repo"]
+    } { continue }
+
     set prop_type "unknown"
     if { [string equal $type "run"] } {
       if { [regexp "STEPS" $prop] } {

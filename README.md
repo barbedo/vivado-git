@@ -9,7 +9,7 @@ Trying to make Vivado more git-friendly on Windows.
 
 ### Installation
 
-Add `init.tcl` (or append the relevant lines if you already have something in it) along with the `scripts` directory to `%APPDATA%\Roaming\Xilinx\Vivado`.
+Add `Vivado_init.tcl` (or append the relevant lines if you already have something in it) along with the `scripts` directory to `%APPDATA%\Roaming\Xilinx\Vivado`.
 
 ### How it works
 

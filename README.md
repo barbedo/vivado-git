@@ -21,10 +21,10 @@ Vivado is a pain in the ass to source control decently, so these scripts provide
 
 ### Workflow
 
- 1. When first starting with a project, create it in a folder called `work` (eg. `C:/.../PROJECT_NAME/work`) . All the untracked files will be under this directory.
+ 1. When first starting with a project, create it in a folder called `vivado_proj` (e.g. `C:/.../PROJECT_NAME/vivado_proj`) . All the untracked files will be under this directory.
 
  2. Place your source files anywhere you want in your project folder (usually in the `C:/.../PROJECT_NAME/src`).
-    
+
     Here is an example of a possible project structure:
     ```
     PROJECT_NAME
@@ -32,18 +32,22 @@ Vivado is a pain in the ass to source control decently, so these scripts provide
         ├── .gitignore
         ├── project_name.tcl         # Project generator script
         ├── src/                     # Tracked source files
-        │   ├── *.v
-        │   ├── *.vhd
+        │   ├── design
+        │   │    ├── *.v
+        │   │    └── *.vhd
+        │   ├── testbench
+        │   │    ├── *.v
+        │   │    └── *.vhd
         │   └── ...
-        └── work/                    # Untracked generated files
-            ├── project_name.xpr 
+        └── vivado_proj/             # Untracked generated files
+            ├── project_name.xpr
             ├── project_name.cache/
             ├── project_name.hw/
             ├── project_name.sim/
             └── ...
     ```
 
- 3. Initiate the git repository with `git init` on the Tcl Console. This will create the repository, automatically change to your project directory (`C:/.../PROJECT_NAME`), generate the `.gitignore` file and stage it. 
+ 3. Initiate the git repository with `git init` on the Tcl Console. This will create the repository, automatically change to your project directory (`C:/.../PROJECT_NAME`), generate the `.gitignore` file and stage it.
 
  4. Stage your source files with `git add`.
 

@@ -28,6 +28,8 @@ Vivado is a pain in the ass to source control decently, so these scripts provide
 
   - A git wrapper that will recreate the project script and add it before committing.
 
+  - A Tcl script (`wproj`) to just create the project generator script without using git.
+
 ### Workflow
 
  1. When first starting with a project, create it in a folder called `vivado_proj` (e.g. `PROJECT_NAME/vivado_proj`) . All the untracked files will be under this directory.

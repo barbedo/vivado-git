@@ -19,7 +19,7 @@ namespace eval ::git_wrapper {
         set command [lindex $args 0]
 
         # Change directory project directory if not in it yet
-        set proj_dir [regsub {\/work$} [get_property DIRECTORY [current_project]] {}]
+        set proj_dir [regsub {\/vivado_proj$} [get_property DIRECTORY [current_project]] {}]
         set current_dir [pwd]
         if {
             [string compare -nocase $proj_dir $current_dir]
@@ -39,7 +39,7 @@ namespace eval ::git_wrapper {
     proc git_init {args} {
         # Generate gitignore file
         set file [open ".gitignore" "w"]
-        puts $file "work/*"
+        puts $file "vivado_proj/*"
         close $file
 
         # Initialize the repo

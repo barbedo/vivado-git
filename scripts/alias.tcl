@@ -3,7 +3,7 @@
 # Interface
 namespace eval ::alias {
     namespace export wproj
-    namespace import ::custom::write_project_tcl_git
+    namespace import ::custom_projutils::write_project_tcl_git
     namespace import ::current_project
     namespace import ::common::get_property
 }

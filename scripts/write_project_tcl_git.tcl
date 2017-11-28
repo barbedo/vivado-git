@@ -40,11 +40,11 @@
 ####################################################################################
 package require Vivado 1.2014.1
 
-namespace eval ::custom {
+namespace eval ::custom_projutils {
   namespace export write_project_tcl_git
 }
 
-namespace eval ::custom {
+namespace eval ::custom_projutils {
 proc write_project_tcl_git {args} {
   # Summary:
   # Export Tcl script for re-creating the current project

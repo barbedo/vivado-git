@@ -165,7 +165,7 @@ proc write_project_tcl_git {args} {
 }
 }
 
-namespace eval ::custom {
+namespace eval ::custom_projutils {
 #
 # write_project_tcl tcl script argument & file handle vars
 #

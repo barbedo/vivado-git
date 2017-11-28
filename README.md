@@ -32,7 +32,7 @@ Vivado is a pain in the ass to source control decently, so these scripts provide
 
 ### Workflow
 
- 1. When first starting with a project, create it in a folder called `vivado_proj` (e.g. `PROJECT_NAME/vivado_proj`) . All the untracked files will be under this directory.
+ 1. When first starting with a project, create it in a folder called `vivado_project` (e.g. `PROJECT_NAME/vivado_project`) . All the untracked files will be under this directory.
 
  2. Place your source files anywhere you want in your project folder (usually in the `PROJECT_NAME/src`).
 
@@ -50,7 +50,7 @@ Vivado is a pain in the ass to source control decently, so these scripts provide
         │   │    ├── *.v
         │   │    └── *.vhd
         │   └── ...
-        └── vivado_proj/             # Untracked generated files
+        └── vivado_project/          # Untracked generated files
             ├── project_name.xpr
             ├── project_name.cache/
             ├── project_name.hw/

@@ -13,7 +13,7 @@ namespace eval ::alias {
     proc wproj {} {
 
         # Change directory project directory if not in it yet
-        set proj_dir [regsub {\/vivado_proj$} [get_property DIRECTORY [current_project]] {}]
+        set proj_dir [regsub {\/vivado_project$} [get_property DIRECTORY [current_project]] {}]
         set current_dir [pwd]
         if {
             [string compare -nocase $proj_dir $current_dir]

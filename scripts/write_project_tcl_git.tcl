@@ -29,8 +29,8 @@
 #   1. The project directory is now relative to the scripts location.
 #	   Project directory was relative to the tcl console current directory.
 #
-#   2. When recreating a project, the generated files will be put in a "vivado_proj" directory
-#      under the project directory. If "vivado_proj" exists already, it will be rewritten.
+#   2. When recreating a project, the generated files will be put in a "vivado_project" directory
+#      under the top directory. If "vivado_project" exists already, it will be rewritten.
 #
 #   3. After recreating a project, the tcl console will change directory to the project directory.
 #
@@ -475,7 +475,7 @@ proc wr_create_project { proj_dir name part_name } {
   # set target project directory path if specified. If not, create project dir in current dir.
   set target_dir $a_global_vars(s_target_proj_dir)
   if { {} == $target_dir } {
-    set tcl_cmd "create_project \$\{project_name\} \$origin_dir/vivado_proj -part $part_name -quiet -force"
+    set tcl_cmd "create_project \$\{project_name\} \$origin_dir/vivado_project -part $part_name -quiet -force"
   } else {
     # is specified target proj dir == current dir? 
     set cwd [file normalize [string map {\\ /} [pwd]]]

@@ -5,6 +5,4 @@ namespace import ::custom_projutils::write_project_tcl_git
 
 source $init_dir/scripts/git_wrapper.tcl
 namespace import ::git_wrapper::git
-
-source $init_dir/scripts/alias.tcl
-namespace import ::alias::wproj
+namespace import ::git_wrapper::wproj

@@ -49,6 +49,11 @@ Vivado is a pain in the ass to source control decently, so these scripts provide
         │   ├── testbench
         │   │    ├── *.v
         │   │    └── *.vhd
+        │   ├── blockdesign
+        │   │    ├── ui
+        │   │    ├── ip
+        │   │    ├── *.bd
+        │   │    └── ...
         │   └── ...
         └── vivado_project/          # Untracked generated files
             ├── project_name.xpr

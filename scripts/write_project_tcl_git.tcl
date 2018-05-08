@@ -368,13 +368,7 @@ proc write_project_tcl_script {} {
         path that was specified with this switch. The 'origin_dir' variable is set to '$a_global_vars(s_origin_dir_override)' in the generated script."
       }
     } else {
-      send_msg_id Vivado-projutils-015 INFO "Please note that by default, the file path for the project source files were set wth respect to the 'origin_dir' variable in the\n\
-      generated script. When this script is executed from the output directory, these source files will be referenced with respect to this 'origin_dir' path value.\n\
-      In case this script was later moved to a different directory, the 'origin_dir' value must be set manually in the script with the path\n\
-      relative to the new output directory to make sure that the source files are referenced correctly from the original project. You can also set the\n\
-      'origin_dir' automatically by setting the 'origin_dir_loc' variable in the tcl shell before sourcing this generated script. The 'origin_dir_loc'\n\
-      variable should be set to the path relative to the new output directory. Alternatively, if you are sourcing the script from the Vivado command line,\n\
-      then set the origin dir using '-tclargs --origin_dir <path>'. For example, 'vivado -mode tcl -source $script_filename -tclargs --origin_dir \"..\"\n"
+      send_msg_id Vivado-projutils-015 INFO "The file path for the project source files were set relative to the location of the generated script.\n"
     }
   }
 

@@ -3,7 +3,7 @@
 # This file provides a basic wrapper to use git directly from the tcl console in
 # Vivado.
 # It requires the write_project_tcl_git.tcl script to work properly.
-# Unversioned files will be put in the work/ folder
+# Unversioned files will be put in the vivado_project folder
 #
 # Ricardo Barbedo
 #

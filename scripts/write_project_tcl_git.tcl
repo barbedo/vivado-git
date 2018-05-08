@@ -37,6 +37,8 @@
 #   4. No mention to the creation time of the project script, so that it is not different
 #      every time it is generated.
 #
+#   5. Remove warning when local sources are detected.
+#
 ####################################################################################
 package require Vivado 1.2014.1
 
@@ -374,12 +376,6 @@ proc write_project_tcl_script {} {
       variable should be set to the path relative to the new output directory. Alternatively, if you are sourcing the script from the Vivado command line,\n\
       then set the origin dir using '-tclargs --origin_dir <path>'. For example, 'vivado -mode tcl -source $script_filename -tclargs --origin_dir \"..\"\n"
     }
-  }
-
-  if { $a_global_vars(b_local_sources) } {
-    print_local_file_msg "warning"
-  } else {
-    print_local_file_msg "info"
   }
 
   reset_global_vars

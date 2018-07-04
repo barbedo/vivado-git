@@ -368,7 +368,7 @@ proc write_project_tcl_script {} {
         path that was specified with this switch. The 'origin_dir' variable is set to '$a_global_vars(s_origin_dir_override)' in the generated script."
       }
     } else {
-      send_msg_id Vivado-projutils-015 INFO "The file path for the project source files were set relative to the location of the generated script.\n"
+      send_msg_id Vivado-projutils-015 INFO "The file paths for the project source files were set relative to the location of the generated script.\n"
     }
   }
 
@@ -2558,11 +2558,14 @@ proc wr_reconfigModules { proj_dir proj_name } {
 
   # write  reconfigurations modules
   set reconfigModules [get_reconfig_modules]
+  variable a_global_vars
 
   foreach rm $reconfigModules {
-    set rm_bds [get_files -quiet -of_objects [get_reconfig_modules $rm] *.bd]
-    foreach rm_bd $rm_bds {
-      write_bd_as_proc $rm_bd
+    if { !$a_global_vars(b_arg_use_bd_files) } {
+      set rm_bds [get_files -norecurse -quiet -of_objects [get_reconfig_modules $rm] *.bd]
+      foreach rm_bd $rm_bds {
+            write_bd_as_proc $rm_bd
+      }
     }
 
     write_specified_reconfig_module $proj_dir $proj_name $rm

@@ -58,6 +58,7 @@ proc write_project_tcl_git {args} {
   # [-force]: Overwrite existing tcl script file
   # [-all_properties]: Write all properties (default & non-default) for the project object(s)
   # [-no_copy_sources]: Do not import sources even if they were local in the original project
+  # [-no_ip_version]: Flag to not include the IP version as part of the IP VLNV in create_bd_cell commands.
   # [-absolute_path]: Make all file paths absolute wrt the original project directory
   # [-dump_project_info]: Write object values
   # [-use_bd_files ]: Use BD sources directly instead of writing out procs to create them
@@ -101,10 +102,12 @@ proc write_project_tcl_git {args} {
       "-force"                { set a_global_vars(b_arg_force) 1 }
       "-all_properties"       { set a_global_vars(b_arg_all_props) 1 }
       "-no_copy_sources"      { set a_global_vars(b_arg_no_copy_srcs) 1 }
+      "-no_ip_version"        { set a_global_vars(b_arg_no_ip_version) 1 }
       "-absolute_path"        { set a_global_vars(b_absolute_path) 1 }
       "-dump_project_info"    { set a_global_vars(b_arg_dump_proj_info) 1 }
       "-use_bd_files"         { set a_global_vars(b_arg_use_bd_files) 1 }
       "-internal"             { set a_global_vars(b_internal) 1 }
+      "-quiet"                { set a_global_vars(b_arg_quiet) 1}
       default {
         # is incorrect switch specified?
         if { [regexp {^-} $option] } {
@@ -237,6 +240,7 @@ proc reset_global_vars {} {
   set a_global_vars(s_target_proj_dir)    ""
   set a_global_vars(b_arg_force)          0
   set a_global_vars(b_arg_no_copy_srcs)   0
+  set a_global_vars(b_arg_no_ip_version)  0
   set a_global_vars(b_absolute_path)      0
   set a_global_vars(b_internal)           0
   set a_global_vars(b_arg_all_props)      0
@@ -605,8 +609,12 @@ proc write_bd_as_proc { bd_file } {
     incr temp_offset
   } 
   set temp_bd_file [file join $temp_dir "temp_$temp_offset.tcl"]
-  write_bd_tcl -no_project_wrapper -make_local -include_layout $temp_bd_file
-  
+  if { $a_global_vars(b_arg_no_ip_version) } {
+    write_bd_tcl -no_project_wrapper -no_ip_version -make_local -include_layout $temp_bd_file
+  } else {
+    write_bd_tcl -no_project_wrapper -make_local -include_layout $temp_bd_file
+  }
+
   # Set non default properties for the BD
   wr_bd_properties $bd_file
   
@@ -1291,6 +1299,23 @@ proc write_props { proj_dir proj_name get_what tcl_obj type {delim "#"}} {
       set prop_entry "[string tolower $prop]$delim$abs_proj_file_path"
     }  
 
+    # handle the board_part_repo_paths property    
+    if {[string equal -nocase $prop "board_part_repo_paths"]} {
+     set board_repo_paths [list]  
+     set board_repo_paths [get_property $prop $current_obj]
+     if { [llength $board_repo_paths] > 0 } {
+          set board_paths [list]
+          foreach path $board_repo_paths {
+            if { $a_global_vars(b_absolute_path) || [need_abs_path $path] } {
+              lappend board_paths $path
+            } else {
+              lappend board_paths "\[file normalize \"\$origin_dir/[get_relative_file_path_for_source $path [get_script_execution_dir]]\"\]"
+            }
+          }
+          set prop_entry "[string tolower $prop]$delim[join $board_paths " "]"
+      }
+    }
+
     # re-align include dir path wrt origin dir
     if { [string equal -nocase $prop "include_dirs"] } {
       if { [llength $abs_proj_file_path] > 0 } {
@@ -1513,7 +1538,6 @@ proc is_deprecated_property { property } {
   if { [string equal $property "board"] ||
        [string equal $property "verilog_dir"] ||
        [string equal $property "compxlib.compiled_library_dir"] ||
-       [string equal $property "dsa.build_flow"] ||
        [string equal $property "runtime"] ||
        [string equal $property "unit_under_test"] ||
        [string equal $property "xelab.snapshot"] ||
@@ -1548,7 +1572,11 @@ proc is_deprecated_property { property } {
        [string equal $property "modelsim.simulate.uut"] ||
        [string equal $property "questa.simulate.uut"] ||
        [string equal $property "ies.simulate.uut"] ||
-       [string equal $property "vcs.simulate.uut"] } {
+       [string equal $property "vcs.simulate.uut"] ||
+       [string equal $property "platform.xocc_link_xp_switches_default"] ||
+       [string equal $property "platform.xocc_compile_xp_switches_default"] ||
+       [string equal $property "dsa"] ||
+       [regexp {dsa\..*} $property ] } {
      return true
   }
   return false
@@ -2441,7 +2469,8 @@ proc wr_dashboards { proj_dir proj_name } {
   # get all dash boards
   # For each dash boards
   # 	create dash board
-  write_specified_dashboard $proj_dir $proj_name
+
+  write_specified_dashboard $proj_dir $proj_name 
 
 }
 
@@ -2453,6 +2482,7 @@ proc write_specified_gadget { proj_dir proj_name gadget } {
   # none 
   
   variable l_script_data
+
   set gadgetName [get_property name [get_dashboard_gadgets [list "$gadget"]]]
   set gadgetType [get_property type [get_dashboard_gadgets [list "$gadget"]]]
 
@@ -2478,6 +2508,7 @@ proc write_specified_dashboard { proj_dir proj_name } {
   # none 
 
   variable l_script_data
+
   #Create map of gadgets wrt to their position, so that gadget position can be restored.
   set gadgetPositionMap [dict create]
 
@@ -2501,7 +2532,7 @@ proc write_specified_dashboard { proj_dir proj_name } {
         lappend l_script_data "if \{\[string equal \[get_dashboard_gadgets \[ list \"$dgd\" \] \] \"$dgd\"\]\} \{"
         set cmd_str "delete_dashboard_gadgets -gadgets $dgd"
         lappend l_script_data "$cmd_str"
-		lappend l_script_data "\}"
+        lappend l_script_data "\}"
       }
     }
 
@@ -2514,7 +2545,7 @@ proc write_specified_dashboard { proj_dir proj_name } {
       lappend l_script_data "$cmd_str"
     }
   }
-  
+
 }
 
 proc wr_prflow { proj_dir proj_name } {

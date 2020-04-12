@@ -4,7 +4,7 @@ Trying to make Vivado more git-friendly.
 
 ### Requirements
 
-- Tested on Vivado 2018.2
+- Tested on Vivado 2019.2
 
 #### Windows
 - [Git for Windows](https://git-scm.com/download/win)

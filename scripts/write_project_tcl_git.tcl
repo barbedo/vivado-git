@@ -168,17 +168,6 @@ proc write_project_tcl_git {args} {
   }
  
   if { [get_files -quiet *.bd] eq "" } { set a_global_vars(b_arg_use_bd_files) 1 }
- 
-  # -no_copy_sources cannot be used without -use_bd_files
-  if { $a_global_vars(b_arg_no_copy_srcs) && !$a_global_vars(b_arg_use_bd_files) } {
-    if { $a_global_vars(b_arg_quiet) } {
-      reset_msg_setting
-    }
-    send_msg_id Vivado-projutils-019 ERROR "This design contains BD sources. The option -no_copy_sources cannot be used without -use_bd_files.\
-      Please remove -no_copy_sources if you wish to write out BD's as procs in the project tcl, otherwise add the option -use_bd_files to directly\
-      include the *.bd files to the new project \n"
-    return
-  }
 
   # set script file directory path
   set a_global_vars(s_path_to_script_dir) [file normalize $file_path]
@@ -754,6 +743,11 @@ proc wr_bd {} {
 
     # Write out bd as a proc
     write_bd_as_proc $bd_file
+
+    # Add wrapper creation
+    set bd_filename [file tail $bd_file]
+    lappend l_script_data "\n# Create wrapper file for $bd_filename"
+    lappend l_script_data "make_wrapper -files \[get_files $bd_filename\] -import -top\n"
   }
 
 
@@ -1616,10 +1610,18 @@ proc write_files { proj_dir proj_name tcl_obj type } {
   set import_coln [list]
   set add_file_coln [list]
 
+  # Create BD wrapper file names (without extensions) to be skipped later
+  set bd_wrapper_names {}
+  foreach bd_file [get_files *.bd] { lappend bd_wrapper_names [file rootname [file tail $bd_file]]_wrapper }
+
   foreach file [get_files -quiet -norecurse -of_objects [get_filesets $tcl_obj]] {
     if { [file extension $file] == ".xcix" } { continue }
     # Skip direct import/add of BD files if -use_bd_files is not provided
     if { [file extension $file] == ".bd" && !$a_global_vars(b_arg_use_bd_files) } { continue }
+
+    # Skip generated BD file wrappers
+    if { [lsearch -exact $bd_wrapper_names [file rootname [file tail $file]]] != -1 } { continue }
+
     set path_dirs [split [string trim [file normalize [string map {\\ /} $file]]] "/"]
     set begin [lsearch -exact $path_dirs "$proj_name.srcs"]
     set src_file [join [lrange $path_dirs $begin+1 end] "/"]

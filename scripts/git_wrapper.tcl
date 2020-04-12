@@ -53,7 +53,7 @@ namespace eval ::git_wrapper {
         set proj_file [current_project].tcl
 
         # Generate project and add it
-        write_project_tcl_git -no_copy_sources -use_bd_files -force $proj_file
+        write_project_tcl_git -no_copy_sources -force $proj_file
         puts $proj_file
         exec git add $proj_file
 
@@ -76,6 +76,6 @@ namespace eval ::git_wrapper {
         # Generate project
         set proj_file [current_project].tcl
         puts $proj_file
-        write_project_tcl_git -no_copy_sources -use_bd_files -force $proj_file
+        write_project_tcl_git -no_copy_sources -force $proj_file
     }
 }

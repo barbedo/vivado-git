@@ -1309,10 +1309,20 @@ proc write_props { proj_dir proj_name get_what tcl_obj type {delim "#"}} {
             if { $a_global_vars(b_absolute_path) || [need_abs_path $path] } {
               lappend board_paths $path
             } else {
-              lappend board_paths "\[file normalize \"\$origin_dir/[get_relative_file_path_for_source $path [get_script_execution_dir]]\"\]"
+              set board_part_path [get_relative_file_path_for_source $path [get_script_execution_dir]]
+              # Limit board repo to those inside the project folder
+              if { [string first .. $board_part_path] == -1 } {
+                lappend board_paths "\[file normalize \"\$origin_dir/$board_part_path\"\]"
+              }
             }
           }
-          set prop_entry "[string tolower $prop]$delim[join $board_paths " "]"
+          # Only set property if there is something in the list
+          if { [llength $board_paths] > 0 } {
+            set prop_entry "[string tolower $prop]$delim[join $board_paths " "]"
+          # Else, skip
+          } else {
+            continue
+          }
       }
     }
 

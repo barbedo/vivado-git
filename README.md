@@ -15,7 +15,8 @@ Trying to make Vivado more git-friendly.
 
 ### Installation
 
-Add `Vivado_init.tcl` (or append the relevant lines if you already have something in it) along with the `scripts` directory to:
+Add `Vivado_init.tcl` (or append the relevant lines if you already have
+something in it) along with the `scripts` directory to:
 
 - `%APPDATA%\Roaming\Xilinx\Vivado` on Windows
 - `~/.Xilinx/Vivado` on Linux
@@ -24,17 +25,21 @@ Add `Vivado_init.tcl` (or append the relevant lines if you already have somethin
 
 Vivado is a pain in the ass to source control decently, so these scripts provide:
 
-- A modified `write_project_tcl_git.tcl` script to generate the project script without absolute paths.
+- A modified `write_project_tcl_git.tcl` script to generate the project script
+  without absolute paths.
 
 - A git wrapper that will recreate the project script and add it before committing.
 
-- A Tcl script (`wproj`) to just create the Tcl project generator script without using git. This script can be called from the Tcl Console on Vivado.
+- A Tcl script (`wproj`) to just create the Tcl project generator script without
+  using git. This script can be called from the Tcl Console on Vivado.
 
 ### Workflow
 
- 1. When first starting a project, create it in a folder called `vivado_project` (e.g. `PROJECT_NAME/vivado_project`). All the untracked files will be under this directory.
+ 1. When first starting a project, create it in a folder called `vivado_project`
+    (e.g. `PROJECT_NAME/vivado_project`). All the untracked files will be under this directory.
 
- 2. Place your source files anywhere you want in your project folder (e.g. `PROJECT_NAME/src`).
+ 2. Place your source files anywhere you want in your project folder
+    (e.g. `PROJECT_NAME/src`).
 
     Here is an example of a possible project structure:
     ```
@@ -63,10 +68,25 @@ Vivado is a pain in the ass to source control decently, so these scripts provide
             └── ...
     ```
 
- 3. Initialize the git repository with `git init` on the Tcl Console. This will create the repository, automatically change to your project directory (`PROJECT_NAME`), generate the `.gitignore` file and stage it.
+ 3. Initialize the git repository with `git init` on the Tcl Console. This will
+    create the repository, automatically change to your project directory
+    (`PROJECT_NAME`), generate the `.gitignore` file and stage it.
 
  4. Stage your source files with `git add`.
 
- 5. When you are done, `git commit` your project. A `PROJECT_NAME.tcl` script will be created in your `PROJECT_NAME` folder and added to your commit.
+ 5. When you are done, `git commit` your project. A `PROJECT_NAME.tcl`
+    script will be created in your `PROJECT_NAME` folder and added to your commit.
 
- 6. Afterwards, when opening the project after cloning it, do it by using `Tools -> Run Tcl Script...` and selecting the `PROJECT_NAME.tcl` file created earlier. This will regenerate the project so that you can continue to work.
+ 6. Afterwards, when opening the project after cloning it, do it by using
+    `Tools -> Run Tcl Script...` and selecting the `PROJECT_NAME.tcl` file
+    created earlier. This will regenerate the project so that you can continue to work.
+
+### Notes
+
+#### Board part repository paths
+
+Only board part repositories inside the project are stored in the project
+generator script.
+
+If you have a system wide board part repository, you will need to add it manually
+after recreating the project from the Tcl script (e.g. via `Settings --> Board Repository`).

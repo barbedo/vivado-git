@@ -4,7 +4,7 @@ Trying to make Vivado more git-friendly.
 
 ### Requirements
 
-- Tested on Vivado 2020.1
+- Tested on Vivado 2020.2
 
 #### Windows
 

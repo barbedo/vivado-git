@@ -7,10 +7,12 @@ Trying to make Vivado more git-friendly.
 - Tested on Vivado 2019.2
 
 #### Windows
+
 - [Git for Windows](https://git-scm.com/download/win)
 - Add `C:\Program Files\Git\bin` (or wherever you have your `git.exe`) to your `PATH`
 
 #### Linux
+
 - Git
 
 ### Installation
@@ -85,9 +87,9 @@ Vivado is a pain in the ass to source control decently, so these scripts provide
 
 ### Notes
 
-### Block design support
+#### Block design support
 
-If a block design is present, Tcl processes will be integrated in the project
+If a block design is present, Tcl procedures will be integrated in the project
 generator file to regenerate it.
 
 The script will also automatically create and add the BD wrapper to the project.

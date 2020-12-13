@@ -732,6 +732,7 @@ proc wr_bd {} {
     # Making sure BD is not locked
     set is_locked [get_property IS_LOCKED [get_files [list "$bd_file"] ] ]
     if { $is_locked == 1 } {
+      close $a_global_vars(fh)
       file delete $a_global_vars(script_file)
       if { $a_global_vars(b_arg_quiet) } {
         reset_msg_setting

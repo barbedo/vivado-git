@@ -809,8 +809,9 @@ proc add_references { sub_design } {
       write_bd_as_proc $file
     } else {
       # Skip adding file if it's already part of the project
-      lappend l_script_data "if { \[get_files [file tail $file]\] == \"\" } {"
-      lappend l_script_data "  import_files -quiet -fileset [current_fileset -srcset] $file\n}"
+      set rel_file_path "[get_relative_file_path_for_source $file [get_script_execution_dir]]"
+      lappend l_script_data "if { \[get_files [file tail $rel_file_path]\] == \"\" } {"
+      lappend l_script_data "  import_files -quiet -fileset [current_fileset -srcset] $rel_file_path\n}"
     }
   }
 }

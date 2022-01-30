@@ -49,6 +49,13 @@ namespace eval ::git_wrapper {
     }
 
     proc git_commit {args} {
+        # Refuse to commit if the "-m" flag is not present, to avoid
+        # getting stuck in the Tcl console if a terminal editor is used
+        if { !("-m"  in $args) } {
+            send_msg_id Vivado-git-001 ERROR "Please use the -m option to include a message when committing.\n"
+            return
+        }
+
         # Get project name
         set proj_file [current_project].tcl
 
